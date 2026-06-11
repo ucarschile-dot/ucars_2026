@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programa Ucariano | Consigna tu auto con Ucars</title>
+  <meta name="description" content="Únete al programa Ucariano. Consigna tu auto con Ucars y recibe el mejor precio del mercado. Sin stress, sin trámites. Lo Barnechea, Santiago.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 nav-scrolled">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <a href="index.html">
+      <span class="text-2xl font-black text-white tracking-tight">U<span class="text-orange-500">cars</span></span>
+    </a>
+    <div class="hidden lg:flex items-center gap-6 text-sm font-medium">
+      <a href="index.html" class="text-slate-300 hover:text-orange-400 transition-colors">Inicio</a>
+      <a href="autos.html" class="text-slate-300 hover:text-orange-400 transition-colors">Autos disponibles</a>
+      <a href="ucariano.html" class="text-purple-400 font-semibold">Quiero ser Ucariano</a>
+      <a href="vende.html" class="text-slate-300 hover:text-orange-400 transition-colors">Vende tu auto</a>
+      <a href="faq.html" class="text-slate-300 hover:text-orange-400 transition-colors">FAQ</a>
+    </div>
+    <button id="menu-toggle" class="lg:hidden text-white p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="lg:hidden mt-4 px-4 pb-4">
+    <a href="index.html" class="block py-3 text-slate-300 border-b border-slate-700">Inicio</a>
+    <a href="autos.html" class="block py-3 text-slate-300 border-b border-slate-700">Autos disponibles</a>
+    <a href="ucariano.html" class="block py-3 text-purple-400 font-semibold border-b border-slate-700">Quiero ser Ucariano</a>
+    <a href="vende.html" class="block py-3 text-slate-300 border-b border-slate-700">Vende tu auto</a>
+  </div>
+</nav>
+
+<!-- HERO UCARIANO -->
+<section class="ucariano-gradient min-h-screen flex items-center pt-20 pb-16 px-6">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-purple-200 text-sm font-medium mb-6">
+      🤝 Programa Ucariano
+    </div>
+    <h1 class="text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+      Tu auto trabaja.<br>
+      <span class="text-yellow-300">Tú descansas.</span>
+    </h1>
+    <p class="text-purple-100 text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
+      Consigna tu auto con Ucars y recibe el mejor precio del mercado.
+      Nos encargamos de todo: publicación, visitas, trámites y pago.
+    </p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="#inscribirse" class="btn-primary text-lg px-8 py-4">
+        Quiero ser Ucariano
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+      <a href="https://wa.me/56974992231?text=Hola,%20quiero%20saber%20más%20sobre%20el%20programa%20Ucariano"
+         target="_blank" class="btn-wa text-lg px-8 py-4">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Hablar por WhatsApp
+      </a>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="grid grid-cols-3 gap-6 mt-14 pt-10 border-t border-white/20">
+      <div>
+        <div class="text-4xl font-black text-yellow-300">+200</div>
+        <div class="text-purple-200 text-sm mt-1">Autos consignados</div>
+      </div>
+      <div>
+        <div class="text-4xl font-black text-yellow-300">30 días</div>
+        <div class="text-purple-200 text-sm mt-1">Tiempo promedio de venta</div>
+      </div>
+      <div>
+        <div class="text-4xl font-black text-yellow-300">0 %</div>
+        <div class="text-purple-200 text-sm mt-1">Comisión oculta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="py-20 px-6 bg-slate-900/50">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14">
+      <p class="text-purple-400 text-sm font-semibold uppercase tracking-wider mb-2">El proceso</p>
+      <h2 class="text-3xl lg:text-4xl font-black text-white">Cómo funciona el programa</h2>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-6">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-purple-500/10 border border-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">📝</span>
+        </div>
+        <div class="text-purple-400 font-black text-4xl mb-2">01</div>
+        <h3 class="text-white font-bold mb-2">Nos contactas</h3>
+        <p class="text-slate-400 text-sm">Nos cuentas sobre tu auto por WhatsApp o formulario. Sin compromisos.</p>
+      </div>
+      <div class="text-center">
+        <div class="w-16 h-16 bg-purple-500/10 border border-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">🔍</span>
+        </div>
+        <div class="text-purple-400 font-black text-4xl mb-2">02</div>
+        <h3 class="text-white font-bold mb-2">Tasación gratuita</h3>
+        <p class="text-slate-400 text-sm">Te damos una tasación justa basada en el mercado actual. En 24 horas.</p>
+      </div>
+      <div class="text-center">
+        <div class="w-16 h-16 bg-purple-500/10 border border-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">🚀</span>
+        </div>
+        <div class="text-purple-400 font-black text-4xl mb-2">03</div>
+        <h3 class="text-white font-bold mb-2">Publicamos tu auto</h3>
+        <p class="text-slate-400 text-sm">Fotos profesionales, publicación en todos los portales y redes sociales.</p>
+      </div>
+      <div class="text-center">
+        <div class="w-16 h-16 bg-purple-500/10 border border-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">💰</span>
+        </div>
+        <div class="text-purple-400 font-black text-4xl mb-2">04</div>
+        <h3 class="text-white font-bold mb-2">Tú recibes el dinero</h3>
+        <p class="text-slate-400 text-sm">Nosotros gestionamos comprador, trámites y transferencia. Tú cobras.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="py-20 px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <p class="text-purple-400 text-sm font-semibold uppercase tracking-wider mb-2">¿Por qué elegirnos?</p>
+        <h2 class="text-3xl font-black text-white mb-8">Lo que incluye el programa Ucariano</h2>
+
+        <div class="space-y-5">
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="text-lg">📸</span>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Sesión fotográfica profesional</h3>
+              <p class="text-slate-400 text-sm mt-1">Fotos de alta calidad que hacen que tu auto destaque en todos los portales.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="text-lg">📣</span>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Publicación en múltiples portales</h3>
+              <p class="text-slate-400 text-sm mt-1">Chileautos, Yapo, Facebook Marketplace, Instagram, TikTok y nuestro sitio web.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="text-lg">🤝</span>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Atención completa al comprador</h3>
+              <p class="text-slate-400 text-sm mt-1">Filtramos consultas, coordinamos visitas y test drives. Tú no pierdes tiempo.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="text-lg">📋</span>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Trámites y transferencia</h3>
+              <p class="text-slate-400 text-sm mt-1">Gestionamos contrato de compraventa, permiso de circulación y transferencia notarial.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="text-lg">🔒</span>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Pago seguro garantizado</h3>
+              <p class="text-slate-400 text-sm mt-1">Solo transferimos cuando tenemos el pago confirmado. Cero riesgo para ti.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing card -->
+      <div>
+        <div class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/20 rounded-2xl p-8 text-center">
+          <div class="text-5xl mb-4">🎯</div>
+          <h3 class="text-white font-black text-2xl mb-2">Comisión transparente</h3>
+          <div class="text-5xl font-black text-yellow-300 my-6">3 – 5%</div>
+          <p class="text-purple-200 text-sm mb-6">Solo cobramos si vendemos tu auto. Sin cobros anticipados. Sin letra chica.</p>
+          <ul class="text-left space-y-3 text-sm text-purple-100 mb-8">
+            <li class="flex items-center gap-2"><span class="text-yellow-300">✓</span> Tasación gratuita</li>
+            <li class="flex items-center gap-2"><span class="text-yellow-300">✓</span> Fotos profesionales incluidas</li>
+            <li class="flex items-center gap-2"><span class="text-yellow-300">✓</span> Publicación en todos los portales</li>
+            <li class="flex items-center gap-2"><span class="text-yellow-300">✓</span> Gestión completa del proceso</li>
+            <li class="flex items-center gap-2"><span class="text-yellow-300">✓</span> Sin pago si no se vende</li>
+          </ul>
+          <a href="#inscribirse" class="btn-primary w-full justify-center text-base">
+            Inscribir mi auto
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO INSCRIPCIÓN -->
+<section id="inscribirse" class="py-20 px-6 bg-slate-900/50">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-purple-400 text-sm font-semibold uppercase tracking-wider mb-2">Únete ahora</p>
+      <h2 class="text-3xl font-black text-white">Inscribe tu auto</h2>
+      <p class="text-slate-400 mt-2">Te contactamos en menos de 24 horas con la tasación.</p>
+    </div>
+
+    <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
+      <form id="lead-form-ucariano" class="space-y-5">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Nombre completo *</label>
+            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre" required>
+          </div>
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">WhatsApp *</label>
+            <input type="tel" name="telefono" class="form-input" placeholder="+56 9 XXXX XXXX" required>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 mb-1 block">Email</label>
+          <input type="email" name="email" class="form-input" placeholder="tu@email.com">
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Marca *</label>
+            <input type="text" name="marca" class="form-input" placeholder="Ej: Toyota" required>
+          </div>
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Modelo *</label>
+            <input type="text" name="modelo" class="form-input" placeholder="Ej: Corolla" required>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Año *</label>
+            <input type="number" name="año" class="form-input" placeholder="2020" min="2000" max="2026" required>
+          </div>
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Kilómetros</label>
+            <input type="text" name="km" class="form-input" placeholder="45.000">
+          </div>
+          <div>
+            <label class="text-sm text-slate-400 mb-1 block">Precio esperado</label>
+            <input type="text" name="precio" class="form-input" placeholder="$ 12.000.000">
+          </div>
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 mb-1 block">Comentarios adicionales</label>
+          <textarea name="comentarios" class="form-input h-24 resize-none" placeholder="Estado del auto, extras, historial..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full justify-center text-base py-4">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enviar inscripción por WhatsApp
+        </button>
+        <p class="text-xs text-slate-500 text-center">Al enviar, abrirá WhatsApp con los datos de tu auto para completar la inscripción.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-slate-900 border-t border-slate-800 py-10 px-6">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <a href="index.html">
+      <span class="text-xl font-black text-white">U<span class="text-orange-500">cars</span></span>
+    </a>
+    <div class="flex gap-6 text-sm text-slate-400">
+      <a href="index.html" class="hover:text-orange-400">Inicio</a>
+      <a href="autos.html" class="hover:text-orange-400">Autos disponibles</a>
+      <a href="vende.html" class="hover:text-orange-400">Vende tu auto</a>
+    </div>
+    <p class="text-slate-500 text-sm">© 2026 Ucars · Lo Barnechea</p>
+  </div>
+</footer>
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/56974992231?text=Hola,%20quiero%20saber%20más%20sobre%20el%20programa%20Ucariano"
+   target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/leads.js"></script>
+</body>
+</html>
