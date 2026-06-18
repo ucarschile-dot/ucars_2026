@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "api/**/*.js": { "maxDuration": 10 }
+  },
+  "rewrites": [
+    { "source": "/api/stock", "destination": "/api/stock.js" },
+    { "source": "/api/whatsapp", "destination": "/api/whatsapp.js" }
+  ]
+}

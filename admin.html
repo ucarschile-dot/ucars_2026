@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UCars — Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent:#f97316; }
+    body { font-family:'Inter',sans-serif; background:#0f172a; color:#f8fafc; }
+    input,select,textarea { background:#1e293b!important; color:#f8fafc!important; border-color:#334155!important; }
+    input::placeholder,textarea::placeholder { color:#64748b!important; }
+    .badge-disp  { background:#166534; color:#bbf7d0; }
+    .badge-res   { background:#92400e; color:#fde68a; }
+    .badge-vend  { background:#1e293b; color:#94a3b8; }
+    .row-res     { opacity:.65; }
+    .row-vend    { opacity:.4; }
+    .btn-primary { background:var(--accent); color:#fff; }
+    .btn-primary:hover { background:#ea580c; }
+    .btn-ghost   { background:#1e293b; color:#94a3b8; border:1px solid #334155; }
+    .btn-ghost:hover { background:#334155; color:#f8fafc; }
+    .btn-danger  { background:#7f1d1d; color:#fca5a5; }
+    .btn-danger:hover { background:#991b1b; }
+    .modal-overlay { background:rgba(0,0,0,.7); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+    .card { background:#1e293b; border:1px solid #334155; border-radius:12px; }
+    table { border-collapse:collapse; }
+    th { background:#0f172a; }
+    tr:hover td { background:#1a2744; }
+    td,th { border-bottom:1px solid #1e293b; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="card p-8 w-full max-w-sm">
+    <div class="text-center mb-6">
+      <div class="text-orange-400 font-bold text-2xl mb-1">UCars</div>
+      <p class="text-slate-400 text-sm">Panel de Administración</p>
+    </div>
+    <input id="login-key" type="password" placeholder="Admin Key"
+      class="w-full px-4 py-3 rounded-lg border text-sm mb-3 outline-none focus:border-orange-400">
+    <button type="button" onclick="doLogin()"
+      class="btn-primary w-full py-3 rounded-lg font-semibold text-sm">Entrar</button>
+    <p id="login-err" class="text-red-400 text-xs text-center mt-3 hidden">Clave incorrecta</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-slate-700/50 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-orange-400 font-bold text-lg">UCars</span>
+      <span class="text-slate-500 text-sm">Admin</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="button" onclick="openModal()" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
+        + Agregar auto
+      </button>
+      <button type="button" onclick="logout()" class="btn-ghost px-3 py-2 rounded-lg text-xs">Salir</button>
+    </div>
+  </header>
+
+  <main class="p-6 max-w-7xl mx-auto">
+
+    <!-- Stats -->
+    <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+
+    <!-- Filtros rápidos -->
+    <div class="flex flex-wrap gap-3 mb-4">
+      <input id="f-search" placeholder="Buscar marca, modelo…" oninput="filterTable()"
+        class="px-3 py-2 rounded-lg border text-sm w-48 outline-none focus:border-orange-400">
+      <select id="f-estado" title="Filtrar por estado" onchange="filterTable()"
+        class="px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+        <option value="">Todos los estados</option>
+        <option value="Disponible">Disponible</option>
+        <option value="Reservado">Reservado</option>
+        <option value="Vendido">Vendido</option>
+      </select>
+      <select id="f-marca" title="Filtrar por marca" onchange="filterTable()"
+        class="px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+        <option value="">Todas las marcas</option>
+      </select>
+      <span id="count-label" class="ml-auto text-sm text-slate-400 self-center"></span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-400 text-xs uppercase tracking-wide">
+              <th class="px-4 py-3">Vehículo</th>
+              <th class="px-4 py-3">Año</th>
+              <th class="px-4 py-3">Precio</th>
+              <th class="px-4 py-3">Km</th>
+              <th class="px-4 py-3">Estado</th>
+              <th class="px-4 py-3">Días</th>
+              <th class="px-4 py-3"><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="7" class="px-4 py-8 text-center text-slate-500">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: Agregar / Editar -->
+<div id="modal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+  <div class="card w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-6 border-b border-slate-700 flex items-center justify-between">
+      <h2 id="modal-title" class="font-semibold text-lg">Agregar auto</h2>
+      <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-white text-xl" aria-label="Cerrar">&times;</button>
+    </div>
+    <form id="vehicle-form" class="p-6" onsubmit="saveVehicle(event)">
+      <input type="hidden" id="f-id">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div><label class="block text-xs text-slate-400 mb-1">Marca *</label>
+          <input id="f-marca-in" required placeholder="Toyota" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Modelo *</label>
+          <input id="f-modelo" required placeholder="Corolla" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Versión</label>
+          <input id="f-version" placeholder="1.8 XEI CVT" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Año *</label>
+          <input id="f-año" type="number" required min="1990" max="2030" placeholder="2022" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Color</label>
+          <input id="f-color" placeholder="Blanco" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Precio (CLP) *</label>
+          <input id="f-precio" type="number" required min="1" placeholder="12900000" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Kilómetros *</label>
+          <input id="f-km" type="number" required min="0" placeholder="38000" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Tipo de carrocería</label>
+          <select id="f-tipo" title="Tipo de carrocería" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+            <option>Sedán</option><option>SUV</option><option>Hatchback</option>
+            <option>Pickup</option><option>Furgón</option><option>Coupé</option>
+            <option>Convertible</option><option>Minivan</option><option>Station Wagon</option><option>Otro</option>
+          </select></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Combustible</label>
+          <select id="f-combustible" title="Combustible" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+            <option>Bencina</option><option>Diesel</option><option>Eléctrico</option><option>Híbrido</option><option>Gas</option>
+          </select></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Transmisión</label>
+          <select id="f-transmision" title="Transmisión" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+            <option>Automática</option><option>Manual</option><option>CVT</option>
+          </select></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Estado</label>
+          <select id="f-estado-in" title="Estado del vehículo" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+            <option>Disponible</option><option>Reservado</option><option>Vendido</option>
+          </select></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Badge</label>
+          <select id="f-badge" title="Badge / etiqueta" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400">
+            <option value="">Ninguno</option>
+            <option>Recién ingresado</option><option>Destacado</option><option>Reservado</option><option>Oferta</option>
+          </select></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Tapiz (interior)</label>
+          <input id="f-tapiz" placeholder="Negro, Beige, Gris…" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">N° de dueños</label>
+          <input id="f-num-duenos" type="number" min="1" max="10" placeholder="1" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div><label class="block text-xs text-slate-400 mb-1">Patente</label>
+          <input id="f-patente" placeholder="AABB11" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400 uppercase"></div>
+
+        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">URL imagen</label>
+          <input id="f-imagen" placeholder="https://…" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+
+        <div class="md:col-span-2 border-t border-slate-700 pt-4 mt-1">
+          <p class="text-xs text-slate-500 mb-3 font-semibold uppercase tracking-wide">Routing interno — no visible al prospecto</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="block text-xs text-slate-400 mb-1">Ucariano asignado</label>
+              <input id="f-vendedor-nombre" placeholder="Nombre del Ucariano" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+            <div><label class="block text-xs text-slate-400 mb-1">WhatsApp Ucariano</label>
+              <input id="f-vendedor-telefono" placeholder="56912345678" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400"></div>
+          </div>
+        </div>
+
+        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Notas internas</label>
+          <textarea id="f-notas" rows="2" placeholder="Detalles, historial, observaciones…" class="w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-orange-400 resize-none"></textarea></div>
+      </div>
+
+      <div id="form-err" class="hidden mt-4 text-red-400 text-sm bg-red-900/20 rounded-lg px-4 py-2"></div>
+
+      <div class="flex gap-3 mt-6 justify-end">
+        <button type="button" onclick="closeModal()" class="btn-ghost px-5 py-2 rounded-lg text-sm">Cancelar</button>
+        <button type="submit" id="save-btn" class="btn-primary px-6 py-2 rounded-lg font-semibold text-sm">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div id="confirm-modal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+  <div class="card p-6 w-full max-w-sm text-center">
+    <p class="text-slate-300 mb-2">¿Eliminar este vehículo?</p>
+    <p id="confirm-label" class="font-semibold mb-6"></p>
+    <div class="flex gap-3 justify-center">
+      <button type="button" onclick="closeConfirm()" class="btn-ghost px-5 py-2 rounded-lg text-sm">Cancelar</button>
+      <button type="button" id="confirm-ok" class="btn-danger px-5 py-2 rounded-lg text-sm font-semibold">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Auth ──────────────────────────────────────────────────────────────────
+let ADMIN_KEY = '';
+let allVehicles = [];
+let filteredVehicles = [];
+
+function doLogin() {
+  const k = document.getElementById('login-key').value.trim();
+  if (!k) return;
+  ADMIN_KEY = k;
+  loadVehicles().then(ok => {
+    if (ok) {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+    } else {
+      document.getElementById('login-err').classList.remove('hidden');
+      ADMIN_KEY = '';
+    }
+  });
+}
+
+document.getElementById('login-key').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function logout() {
+  ADMIN_KEY = '';
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-key').value = '';
+}
+
+// ── Data ──────────────────────────────────────────────────────────────────
+async function loadVehicles() {
+  try {
+    const res = await fetch('/api/stock', {
+      headers: { Authorization: `Bearer ${ADMIN_KEY}` }
+    });
+    if (res.status === 401) return false;
+    allVehicles = await res.json();
+    renderStats();
+    populateMarcaFilter();
+    filterTable();
+    return true;
+  } catch { return false; }
+}
+
+function renderStats() {
+  const disp  = allVehicles.filter(v => v.estado === 'Disponible').length;
+  const res   = allVehicles.filter(v => v.estado === 'Reservado').length;
+  const vend  = allVehicles.filter(v => v.estado === 'Vendido').length;
+  const precios = allVehicles.filter(v => v.estado === 'Disponible').map(v => v.precio);
+  const avgP  = precios.length ? Math.round(precios.reduce((a,b)=>a+b,0)/precios.length) : 0;
+  const avgD  = allVehicles.filter(v => v.estado === 'Disponible' && v.dias_en_stock != null);
+  const avgDias = avgD.length ? Math.round(avgD.reduce((a,v)=>a+v.dias_en_stock,0)/avgD.length) : 0;
+
+  document.getElementById('stats').innerHTML = [
+    { label:'Disponibles', value: disp, color:'text-green-400' },
+    { label:'Reservados',  value: res,  color:'text-yellow-400' },
+    { label:'Vendidos',    value: vend, color:'text-slate-400' },
+    { label:'Precio prom.', value: avgP ? '$ '+avgP.toLocaleString('es-CL') : '—', color:'text-orange-400' },
+  ].map(s => `
+    <div class="card p-4">
+      <p class="text-xs text-slate-400 mb-1">${s.label}</p>
+      <p class="text-2xl font-bold ${s.color}">${s.value}</p>
+    </div>`).join('') + `
+    <div class="card p-4">
+      <p class="text-xs text-slate-400 mb-1">Días prom. en stock</p>
+      <p class="text-2xl font-bold text-blue-400">${avgDias}</p>
+    </div>`;
+}
+
+function populateMarcaFilter() {
+  const sel = document.getElementById('f-marca');
+  const marcas = [...new Set(allVehicles.map(v => v.marca))].sort();
+  sel.innerHTML = '<option value="">Todas las marcas</option>' +
+    marcas.map(m => `<option>${m}</option>`).join('');
+}
+
+function filterTable() {
+  const search = document.getElementById('f-search').value.toLowerCase();
+  const estado = document.getElementById('f-estado').value;
+  const marca  = document.getElementById('f-marca').value;
+
+  filteredVehicles = allVehicles.filter(v => {
+    const txt = `${v.marca} ${v.modelo} ${v.version||''}`.toLowerCase();
+    return (!search || txt.includes(search))
+        && (!estado || v.estado === estado)
+        && (!marca  || v.marca  === marca);
+  });
+
+  document.getElementById('count-label').textContent =
+    `${filteredVehicles.length} vehículo${filteredVehicles.length !== 1 ? 's' : ''}`;
+
+  renderTable(filteredVehicles);
+}
+
+function renderTable(vehicles) {
+  const tbody = document.getElementById('table-body');
+  if (!vehicles.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500">Sin resultados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = vehicles.map(v => {
+    const rowClass = v.estado === 'Reservado' ? 'row-res' : v.estado === 'Vendido' ? 'row-vend' : '';
+    const badgeClass = v.estado === 'Disponible' ? 'badge-disp' : v.estado === 'Reservado' ? 'badge-res' : 'badge-vend';
+    return `
+    <tr class="${rowClass} cursor-pointer" ondblclick="openModal('${v.id}')">
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-3">
+          ${v.imagen ? `<img src="${v.imagen}" class="w-10 h-8 object-cover rounded" loading="lazy" onerror="this.style.display='none'">` : '<div class="w-10 h-8 bg-slate-700 rounded flex items-center justify-center text-xs text-slate-500">?</div>'}
+          <div>
+            <p class="font-semibold text-white">${v.marca} ${v.modelo}</p>
+            <p class="text-slate-400 text-xs">${v.version || ''}</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-4 py-3 text-slate-300">${v.año}</td>
+      <td class="px-4 py-3 font-semibold text-orange-400">$${v.precio.toLocaleString('es-CL')}</td>
+      <td class="px-4 py-3 text-slate-300">${v.km.toLocaleString('es-CL')} km</td>
+      <td class="px-4 py-3">
+        <span class="text-xs font-semibold px-2 py-1 rounded-full ${badgeClass}">${v.estado}</span>
+      </td>
+      <td class="px-4 py-3 text-slate-400 text-xs">${v.dias_en_stock ?? '—'} d</td>
+      <td class="px-4 py-3">
+        <div class="flex gap-2">
+          <button onclick="openModal('${v.id}')" class="btn-ghost px-3 py-1 rounded text-xs">Editar</button>
+          <button onclick="quickStatus('${v.id}','${v.estado}')" class="btn-ghost px-3 py-1 rounded text-xs" title="Cambiar estado">⟳</button>
+          <button onclick="askDelete('${v.id}','${v.marca} ${v.modelo}')" class="btn-danger px-3 py-1 rounded text-xs">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Estado rápido (ciclo Disponible → Reservado → Vendido → Disponible) ───
+async function quickStatus(id, current) {
+  const next = current === 'Disponible' ? 'Reservado'
+             : current === 'Reservado'  ? 'Vendido'
+             : 'Disponible';
+  await apiPatch({ id, estado: next, badge: next === 'Reservado' ? 'Reservado' : '' });
+  await loadVehicles();
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────
+function openModal(id) {
+  const vehicle = id ? allVehicles.find(v => v.id === id) : null;
+  document.getElementById('modal-title').textContent = vehicle ? 'Editar auto' : 'Agregar auto';
+  document.getElementById('f-id').value                = vehicle?.id                ?? '';
+  document.getElementById('f-patente').value            = vehicle?.patente            ?? '';
+  document.getElementById('f-marca-in').value           = vehicle?.marca              ?? '';
+  document.getElementById('f-modelo').value             = vehicle?.modelo             ?? '';
+  document.getElementById('f-version').value            = vehicle?.version            ?? '';
+  document.getElementById('f-año').value                = vehicle?.año                ?? '';
+  document.getElementById('f-precio').value             = vehicle?.precio             ?? '';
+  document.getElementById('f-km').value                 = vehicle?.km                 ?? '';
+  document.getElementById('f-tipo').value               = vehicle?.tipo               ?? 'Sedán';
+  document.getElementById('f-combustible').value        = vehicle?.combustible        ?? 'Bencina';
+  document.getElementById('f-transmision').value        = vehicle?.transmision        ?? 'Automática';
+  document.getElementById('f-color').value              = vehicle?.color              ?? '';
+  document.getElementById('f-tapiz').value              = vehicle?.tapiz              ?? '';
+  document.getElementById('f-num-duenos').value         = vehicle?.num_duenos         ?? '';
+  document.getElementById('f-estado-in').value          = vehicle?.estado             ?? 'Disponible';
+  document.getElementById('f-badge').value              = vehicle?.badge              ?? '';
+  document.getElementById('f-imagen').value             = vehicle?.imagen             ?? '';
+  document.getElementById('f-vendedor-nombre').value    = vehicle?.vendedor_nombre    ?? '';
+  document.getElementById('f-vendedor-telefono').value  = vehicle?.vendedor_telefono  ?? '';
+  document.getElementById('f-notas').value              = vehicle?.notas              ?? '';
+  document.getElementById('form-err').classList.add('hidden');
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+}
+
+async function saveVehicle(e) {
+  e.preventDefault();
+  const id = document.getElementById('f-id').value;
+  const numDuenos = document.getElementById('f-num-duenos').value;
+  const body = {
+    patente:            document.getElementById('f-patente').value.trim().toUpperCase(),
+    marca:              document.getElementById('f-marca-in').value.trim(),
+    modelo:             document.getElementById('f-modelo').value.trim(),
+    version:            document.getElementById('f-version').value.trim(),
+    año:                parseInt(document.getElementById('f-año').value),
+    precio:             parseInt(document.getElementById('f-precio').value),
+    km:                 parseInt(document.getElementById('f-km').value),
+    tipo:               document.getElementById('f-tipo').value,
+    combustible:        document.getElementById('f-combustible').value,
+    transmision:        document.getElementById('f-transmision').value,
+    color:              document.getElementById('f-color').value.trim(),
+    tapiz:              document.getElementById('f-tapiz').value.trim(),
+    num_duenos:         numDuenos ? parseInt(numDuenos) : null,
+    estado:             document.getElementById('f-estado-in').value,
+    badge:              document.getElementById('f-badge').value,
+    imagen:             document.getElementById('f-imagen').value.trim(),
+    vendedor_nombre:    document.getElementById('f-vendedor-nombre').value.trim(),
+    vendedor_telefono:  document.getElementById('f-vendedor-telefono').value.trim(),
+    notas:              document.getElementById('f-notas').value.trim(),
+  };
+
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Guardando…';
+  btn.disabled = true;
+
+  try {
+    if (id) {
+      await apiPatch({ id, ...body });
+    } else {
+      await apiPost(body);
+    }
+    closeModal();
+    await loadVehicles();
+  } catch (err) {
+    const errEl = document.getElementById('form-err');
+    errEl.textContent = err.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'Guardar';
+    btn.disabled = false;
+  }
+}
+
+// ── Confirm delete ────────────────────────────────────────────────────────
+let pendingDeleteId = null;
+
+function askDelete(id, label) {
+  pendingDeleteId = id;
+  document.getElementById('confirm-label').textContent = label;
+  document.getElementById('confirm-modal').classList.remove('hidden');
+  document.getElementById('confirm-ok').onclick = async () => {
+    await apiDelete(pendingDeleteId);
+    closeConfirm();
+    await loadVehicles();
+  };
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-modal').classList.add('hidden');
+  pendingDeleteId = null;
+}
+
+// ── API helpers ───────────────────────────────────────────────────────────
+async function apiPost(body) {
+  const res = await fetch('/api/stock', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ADMIN_KEY}` },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const j = await res.json(); throw new Error(j.error || 'Error al guardar'); }
+  return res.json();
+}
+
+async function apiPatch(body) {
+  const res = await fetch('/api/stock', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ADMIN_KEY}` },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const j = await res.json(); throw new Error(j.error || 'Error al actualizar'); }
+  return res.json();
+}
+
+async function apiDelete(id) {
+  const res = await fetch(`/api/stock?id=${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${ADMIN_KEY}` }
+  });
+  if (!res.ok && res.status !== 204) throw new Error('Error al eliminar');
+}
+
+// Cerrar modales con Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeConfirm(); }
+});
+</script>
+</body>
+</html>
