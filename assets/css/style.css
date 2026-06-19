@@ -1,38 +1,39 @@
-/* UCars — Premium Dark Car Marketplace Design System */
+/* UCars — Brand Design System */
+/* Colores extraídos directamente de ucars.cl */
 
 :root {
-  /* Core backgrounds */
-  --bg-base:     #07090f;
-  --bg-card:     #0f1420;
-  --bg-elevated: #161c2d;
+  /* Core backgrounds — extraídos del sitio real */
+  --bg-base:     #0a0a0a;   /* body background real de ucars.cl */
+  --bg-card:     #1a1a1a;   /* tarjetas sobre fondo oscuro */
+  --bg-elevated: #282828;   /* navbar color real de ucars.cl */
 
   /* Borders */
-  --border:       #1e2a42;
-  --border-light: #253047;
+  --border:       #2e2e2e;
+  --border-light: #3a3a3a;
 
-  /* Accent — orange */
-  --accent:       #f97316;
-  --accent-hover: #fb923c;
-  --accent-glow:  rgba(249, 115, 22, 0.15);
+  /* Accent — azul UCars #1947e2 (CTA real del sitio) */
+  --accent:       #1947e2;
+  --accent-hover: #1539c4;
+  --accent-glow:  rgba(25, 71, 226, 0.18);
 
-  /* Accent 2 — indigo (Ucariano) */
-  --accent-2: #6366f1;
+  /* Accent 2 — rojo UCars #cf3e3b (precios destacados / alertas) */
+  --accent-2: #cf3e3b;
 
   /* Text */
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:     #475569;
+  --text-primary:   #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted:     #5f6973;
 
   /* Semantic */
   --green:       #22c55e;
-  --price-color: #fbbf24;
+  --price-color: #ffffff;   /* precios en blanco como el sitio original */
 
   /* Aliases kept for backward compat */
-  --primary:   #07090f;
-  --secondary: #0f1420;
-  --card-bg:   #0f1420;
-  --text:      #f1f5f9;
-  --muted:     #94a3b8;
+  --primary:   #0a0a0a;
+  --secondary: #1a1a1a;
+  --card-bg:   #1a1a1a;
+  --text:      #ffffff;
+  --muted:     #a0a0a0;
 }
 
 /* ─── RESET & BASE ─────────────────────────────────── */
@@ -716,6 +717,48 @@ footer a:hover { color: var(--accent); }
   width: 36px;
   height: 36px;
   color: var(--text-muted);
+}
+
+/* ─── HERO TYPOGRAPHY HELPERS ──────────────────────── */
+.hero-accent { color: var(--accent); }
+.hero-accent-bold { color: var(--accent); font-weight: 600; }
+
+.hero-lead {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.hero-stat-num {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: .8rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.stat-vdivider {
+  width: 1px;
+  height: 40px;
+  background: var(--border-light);
+  flex-shrink: 0;
 }
 
 /* ─── CREDENTIAL LINE ───────────────────────────────── */

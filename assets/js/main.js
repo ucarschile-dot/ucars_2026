@@ -1,10 +1,9 @@
 // NAV scroll effect
 const navbar = document.getElementById('navbar');
 if (navbar) {
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) navbar.classList.add('nav-scrolled');
-    else navbar.classList.remove('nav-scrolled');
-  });
+  const onScroll = () => navbar.classList.toggle('nav-scrolled', window.scrollY > 20);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 // Mobile menu toggle
@@ -19,9 +18,21 @@ const scrollTopBtn = document.getElementById('scroll-top');
 if (scrollTopBtn) {
   window.addEventListener('scroll', () => {
     scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-  });
+  }, { passive: true });
   scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
+
+// Scroll reveal with IntersectionObserver
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // Format CLP price
 function formatPrice(n) {
@@ -33,75 +44,74 @@ function formatKm(n) {
   return n.toLocaleString('es-CL') + ' km';
 }
 
-// Build car card HTML
+const WA_SVG = `<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+// Build car card HTML — v2 design system
 function buildCarCard(car) {
   const badgeMap = {
     'Recién ingresado': 'badge-new',
-    'Destacado': 'badge-feat',
-    'Reservado': 'badge-res'
+    'Destacado':        'badge-feat',
+    'Reservado':        'badge-res'
   };
   const badgeClass = badgeMap[car.badge] || '';
-  const badgeHtml = car.badge
-    ? `<span class="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full ${badgeClass}">${car.badge}</span>`
+  const badgeHtml  = car.badge
+    ? `<span class="card-badge ${badgeClass}">${car.badge}</span>`
     : '';
 
   const soldOverlay = car.estado === 'Reservado'
-    ? `<div class="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
-         <span class="bg-slate-600 text-white text-sm font-bold px-3 py-1 rounded-full">Reservado</span>
+    ? `<div style="position:absolute;inset:0;background:rgba(7,9,15,0.65);display:flex;align-items:center;justify-content:center;">
+         <span style="background:#334155;color:#fff;font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:999px;letter-spacing:.04em;">RESERVADO</span>
        </div>`
     : '';
 
   const ctaBtn = car.estado === 'Reservado'
-    ? `<button disabled class="btn-outline w-full justify-center text-sm opacity-50 cursor-not-allowed">Reservado</button>`
+    ? `<button disabled class="btn-outline w-full justify-center text-sm" style="opacity:.4;cursor:not-allowed;">Reservado</button>`
     : `<a href="https://wa.me/56974992231?text=${encodeURIComponent(car.whatsapp_msg)}"
-          target="_blank" class="btn-wa w-full justify-center text-sm"
+          target="_blank"
+          class="btn-wa w-full justify-center"
+          style="font-size:.85rem;"
           data-track-car data-auto-id="${car.id}" data-marca="${car.marca}" data-modelo="${car.modelo}" data-año="${car.año}" data-precio="${car.precio}">
-         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-         Ver este auto
+         ${WA_SVG} Consultar por WhatsApp
        </a>`;
 
   return `
     <div class="car-card">
-      <div class="relative overflow-hidden">
+      <div class="car-card-img-wrap">
         <img src="${car.imagen}" alt="${car.marca} ${car.modelo} ${car.año}" loading="lazy">
         ${badgeHtml}
         ${soldOverlay}
+        <div class="card-price-overlay">
+          <span class="card-price-value">${formatPrice(car.precio)}</span>
+        </div>
       </div>
-      <div class="p-5">
-        <div class="flex items-start justify-between mb-1">
-          <div>
-            <h3 class="text-white font-bold text-lg leading-tight">${car.marca} ${car.modelo}</h3>
-            <p class="text-slate-400 text-sm">${car.version}</p>
-          </div>
-          <div class="price-tag text-right">${formatPrice(car.precio)}</div>
+      <div class="car-card-body">
+        <div>
+          <h3 class="car-card-title">${car.marca} ${car.modelo}</h3>
+          <p class="car-card-version">${car.version}</p>
         </div>
-        <div class="flex gap-3 mt-3 flex-wrap">
-          <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">${car.año}</span>
-          <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">${formatKm(car.km)}</span>
-          <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">${car.combustible}</span>
-          <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">${car.transmision}</span>
+        <div class="car-chips">
+          <span class="car-chip">${car.año}</span>
+          <span class="car-chip">${formatKm(car.km)}</span>
+          <span class="car-chip">${car.combustible}</span>
+          <span class="car-chip">${car.transmision}</span>
         </div>
-        <div class="mt-4">${ctaBtn}</div>
+        <div class="car-card-cta">${ctaBtn}</div>
       </div>
     </div>
   `;
 }
 
-// Load cars — Supabase via /api/stock (fallback a JSON local)
-async function loadCars(params = {}) {
+// Load cars — API con fallback local
+async function loadCars() {
   try {
-    const qs = new URLSearchParams(params).toString();
-    const url = '/api/stock' + (qs ? '?' + qs : '');
-    const res = await fetch(url);
+    const res = await fetch('/api/stock');
     if (!res.ok) throw new Error('api error');
     const data = await res.json();
-    // Normalizar: la API devuelve imagen y whatsapp_msg puede no existir
     return data.map(v => ({
       ...v,
       whatsapp_msg: v.whatsapp_msg || `Hola, me interesa el ${v.marca} ${v.modelo} ${v.año} que vi en ucars.cl`
     }));
   } catch {
-    // Fallback local para desarrollo sin API
     try {
       const res = await fetch('data/autos.json');
       if (!res.ok) throw new Error();
@@ -110,7 +120,7 @@ async function loadCars(params = {}) {
   }
 }
 
-// Populate hero preview (index.html)
+// Populate hero preview grid (index.html) with stagger animation
 async function populateHeroCars() {
   const container = document.getElementById('hero-cars');
   if (!container) return;
@@ -120,15 +130,22 @@ async function populateHeroCars() {
   const offsets = ['', 'mt-6', '-mt-2', 'mt-4'];
   container.innerHTML = featured.map((car, i) => `
     <div class="${offsets[i]}">
-      <div class="rounded-xl overflow-hidden border border-slate-700/50 shadow-lg">
-        <img src="${car.imagen}" alt="${car.marca} ${car.modelo}" class="w-full h-44 object-cover">
-        <div class="bg-slate-800/80 px-3 py-2">
-          <p class="text-white text-xs font-semibold">${car.marca} ${car.modelo} ${car.año}</p>
-          <p class="text-orange-400 text-xs font-bold">${formatPrice(car.precio)}</p>
+      <div class="hero-preview-card">
+        <img src="${car.imagen}" alt="${car.marca} ${car.modelo}" style="width:100%;height:176px;object-fit:cover;display:block;">
+        <div style="background:var(--bg-elevated);padding:10px 14px;border-top:1px solid var(--border);">
+          <p style="color:var(--text-primary);font-size:.8rem;font-weight:600;line-height:1.3;">${car.marca} ${car.modelo} ${car.año}</p>
+          <p style="color:var(--price-color);font-size:.8rem;font-weight:700;margin-top:2px;">${formatPrice(car.precio)}</p>
         </div>
       </div>
     </div>
   `).join('');
+
+  // Trigger stagger entrance
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.hero-preview-card').forEach((el, i) => {
+      setTimeout(() => el.classList.add('loaded'), i * 100 + 50);
+    });
+  });
 }
 
 // Populate featured cars section (index.html)
@@ -138,13 +155,18 @@ async function populateFeaturedCars() {
   const cars = await loadCars();
   const featured = cars.filter(c => c.estado === 'Disponible').slice(0, 6);
   if (!featured.length) {
-    container.innerHTML = '<p class="text-slate-400 col-span-3">No hay autos disponibles por ahora.</p>';
+    container.innerHTML = '<p style="color:var(--text-secondary);grid-column:1/-1;">No hay autos disponibles por ahora.</p>';
     return;
   }
   container.innerHTML = featured.map(buildCarCard).join('');
+  // Observe newly added cards for reveal
+  container.querySelectorAll('.car-card').forEach(el => {
+    el.classList.add('reveal');
+    revealObserver.observe(el);
+  });
 }
 
-// Init on DOMContentLoaded
+// Init
 document.addEventListener('DOMContentLoaded', () => {
   populateHeroCars();
   populateFeaturedCars();
