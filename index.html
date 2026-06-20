@@ -4,335 +4,640 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ucars | Autos usados seleccionados en Lo Barnechea, Santiago</title>
-  <meta name="description" content="La forma moderna, segura y transparente de comprar, vender o consignar tu auto en Lo Barnechea, Santiago, Chile. Vehículos revisados, historial claro.">
+  <meta name="description" content="La forma moderna, segura y transparente de comprar, vender o consignar tu auto en Lo Barnechea, Santiago. Vehículos revisados, historial claro.">
   <meta property="og:title" content="Ucars | Autos usados seleccionados">
-  <meta property="og:description" content="Conduce hoy. Vende mañana. La forma moderna de comprar y vender autos en Lo Barnechea.">
-  <meta property="og:image" content="assets/img/og-ucars.jpg">
-  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+  <meta property="og:description" content="Conduce hoy. Vende mañana.">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
-  <!-- Meta Pixel -->
-  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1530516365541084');fbq('track','PageView');</script>
-  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1530516365541084&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    body { background: #090909; }
+
+    /* NAV */
+    #navbar {
+      background: transparent;
+      transition: background .4s, backdrop-filter .4s;
+    }
+    #navbar.scrolled {
+      background: rgba(9,9,9,.88);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* HERO */
+    .hero-wrap {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=85');
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(9,9,9,.94) 0%,
+        rgba(9,9,9,.72) 45%,
+        rgba(9,9,9,.28) 100%
+      );
+    }
+    .hero-overlay-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 220px;
+      background: linear-gradient(to top, #090909, transparent);
+    }
+    .hero-content { position: relative; z-index: 10; }
+
+    /* Hero headline */
+    .hero-headline {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .hero-headline .thin { font-weight: 200; font-style: italic; }
+
+    /* Glass badge */
+    .glass-badge {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+    }
+
+    /* BRAND PILLS */
+    .brand-pill {
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.55);
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      background: rgba(255,255,255,.04);
+    }
+    .brand-pill:hover, .brand-pill.active {
+      background: #1947e2;
+      border-color: #1947e2;
+      color: #fff;
+    }
+
+    /* CARDS */
+    .vcard {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(255,255,255,.07);
+      transition: transform .35s cubic-bezier(.16,1,.3,1),
+                  box-shadow .35s ease,
+                  border-color .3s;
+      cursor: pointer;
+    }
+    .vcard:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 56px rgba(0,0,0,.6), 0 0 0 1px #1947e2, 0 0 40px rgba(25,71,226,.12);
+      border-color: #1947e2;
+    }
+    .vcard-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    .vcard-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s cubic-bezier(.16,1,.3,1);
+      display: block;
+    }
+    .vcard:hover .vcard-img-wrap img { transform: scale(1.06); }
+    .vcard-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(9,9,9,.85) 0%, transparent 55%);
+    }
+    .vcard-price {
+      position: absolute;
+      bottom: 14px; left: 16px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+    .vcard-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .vcard-fav {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(9,9,9,.6);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .vcard:hover .vcard-fav { opacity: 1; }
+    .vcard-body { padding: 16px 18px 18px; }
+    .vcard-title { font-size: 1rem; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+    .vcard-sub { font-size: .78rem; color: #6b7280; margin-top: 2px; }
+    .vcard-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .vcard-chip {
+      font-size: .7rem; font-weight: 500;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #9ca3af;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .vcard-cta {
+      margin-top: 14px; width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 11px; border-radius: 10px;
+      font-size: .85rem; font-weight: 600;
+      background: #25d366; color: #fff;
+      transition: background .2s, transform .1s; text-decoration: none;
+    }
+    .vcard-cta:hover { background: #20ba5a; transform: translateY(-1px); }
+    .vcard-cta.reserved { background: rgba(255,255,255,.06); color: #6b7280; cursor: default; }
+
+    /* SECTION headings */
+    .section-label {
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .14em; color: #1947e2;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 900; letter-spacing: -.03em; color: #fff; line-height: 1.1;
+    }
+
+    /* WHY cards */
+    .why-card {
+      border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 28px;
+      background: rgba(255,255,255,.025); transition: border-color .3s, background .3s;
+    }
+    .why-card:hover { border-color: rgba(25,71,226,.4); background: rgba(25,71,226,.06); }
+    .why-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(25,71,226,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* SCROLLBAR HIDE */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* CTA BAND */
+    .cta-band {
+      background: linear-gradient(135deg, #0d1a3a 0%, #1947e2 100%);
+      position: relative; overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* FORM */
+    .input-field {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 13px 16px; color: #fff; font-size: .9rem;
+      width: 100%; outline: none; transition: border-color .2s;
+    }
+    .input-field::placeholder { color: rgba(255,255,255,.3); }
+    .input-field:focus { border-color: #1947e2; }
+  </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6">
-  <div class="max-w-6xl mx-auto flex items-center justify-between">
-    <!-- Logo -->
-    <a href="index.html" class="flex items-center gap-2">
-      <span class="text-2xl font-black text-white tracking-tight">U<span class="text-blue-600">cars</span></span>
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-5 px-6 lg:px-10">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-1">
+      <span class="text-2xl font-black text-white tracking-tight">U<span style="color:#1947e2">cars</span></span>
     </a>
 
-    <!-- Desktop nav -->
-    <div class="hidden lg:flex items-center gap-6 text-sm font-medium">
-      <a href="index.html" class="text-white hover:text-blue-500 transition-colors">Inicio</a>
-      <a href="autos.html" class="text-slate-300 hover:text-blue-500 transition-colors">Autos disponibles</a>
-      <a href="financiamiento.html" class="text-slate-300 hover:text-blue-500 transition-colors">Financiamiento</a>
-      <a href="ucariano.html" class="text-slate-300 hover:text-blue-500 transition-colors">Quiero ser Ucariano</a>
-      <a href="faq.html" class="text-slate-300 hover:text-blue-500 transition-colors">FAQ</a>
-      <a href="vende.html" class="text-slate-300 hover:text-blue-500 transition-colors">Vende tu auto</a>
+    <div class="hidden lg:flex items-center gap-7 text-sm font-medium">
+      <a href="index.html" class="text-white">Inicio</a>
+      <a href="autos.html" class="text-white/50 hover:text-white transition-colors">Autos</a>
+      <a href="financiamiento.html" class="text-white/50 hover:text-white transition-colors">Financiamiento</a>
+      <a href="ucariano.html" class="text-white/50 hover:text-white transition-colors">Ucariano</a>
+      <a href="faq.html" class="text-white/50 hover:text-white transition-colors">FAQ</a>
+      <a href="vende.html" class="text-white/50 hover:text-white transition-colors">Vende</a>
     </div>
 
-    <!-- CTA + contact -->
-    <div class="hidden lg:flex items-center gap-4">
-      <a href="https://wa.me/56974992231?text=Hola,%20quiero%20información%20sobre%20sus%20autos"
-         target="_blank" class="btn-wa text-sm">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <div class="flex items-center gap-3">
+      <a href="https://wa.me/56974992231?text=Hola,%20quiero%20información" target="_blank" rel="noopener noreferrer"
+         class="hidden lg:flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-full border border-white/15 text-white/80 hover:border-white/40 hover:text-white transition-all">
+        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         +56 9 7499 2231
       </a>
-      <a href="autos.html" class="btn-primary text-sm">Ver autos</a>
+      <a href="autos.html" class="text-sm font-bold px-5 py-2.5 rounded-full text-white transition-all" style="background:#1947e2">Ver autos</a>
+      <button id="menu-toggle" type="button" aria-label="Abrir menú" class="lg:hidden text-white p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
-
-    <!-- Mobile hamburger -->
-    <button id="menu-toggle" class="lg:hidden text-white p-2" aria-label="Menú">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
   </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="lg:hidden mt-4 px-4 pb-4">
-    <a href="index.html" class="block py-3 text-white border-b border-slate-700">Inicio</a>
-    <a href="autos.html" class="block py-3 text-slate-300 border-b border-slate-700">Autos disponibles</a>
-    <a href="financiamiento.html" class="block py-3 text-slate-300 border-b border-slate-700">Financiamiento</a>
-    <a href="ucariano.html" class="block py-3 text-slate-300 border-b border-slate-700">Quiero ser Ucariano</a>
-    <a href="faq.html" class="block py-3 text-slate-300 border-b border-slate-700">FAQ</a>
-    <a href="vende.html" class="block py-3 text-slate-300 border-b border-slate-700">Vende tu auto</a>
-    <a href="https://wa.me/56974992231" target="_blank" class="btn-wa mt-4 w-full justify-center">WhatsApp</a>
+  <div id="mobile-menu" class="lg:hidden mt-4 mx-4 rounded-2xl border border-white/10 overflow-hidden" style="background:rgba(9,9,9,.95);display:none">
+    <a href="autos.html" class="block px-6 py-4 text-white/70 border-b border-white/5 hover:text-white">Autos disponibles</a>
+    <a href="financiamiento.html" class="block px-6 py-4 text-white/70 border-b border-white/5 hover:text-white">Financiamiento</a>
+    <a href="ucariano.html" class="block px-6 py-4 text-white/70 border-b border-white/5 hover:text-white">Quiero ser Ucariano</a>
+    <a href="vende.html" class="block px-6 py-4 text-white/70 border-b border-white/5 hover:text-white">Vende tu auto</a>
+    <a href="faq.html" class="block px-6 py-4 text-white/70">FAQ</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero-gradient hero-mesh min-h-screen flex items-center pt-20">
-  <div class="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center hero-content w-full">
-    <div>
-      <!-- Credential line -->
-      <div class="credential-line mb-6">
-        <span class="stars">★★★★★</span>
-        <span class="credential-sep"></span>
-        <span>4.9 en Google</span>
-        <span class="credential-sep"></span>
-        <span>+200 autos vendidos</span>
-        <span class="credential-sep"></span>
-        <span class="hero-accent-bold">Lo Barnechea</span>
-      </div>
+<section class="hero-wrap">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-bottom"></div>
 
-      <h1 class="text-5xl lg:text-7xl font-black text-white leading-none mb-6 display-heading">
-        Conduce hoy.<br>
-        <span class="hero-accent">Vende mañana.</span>
-      </h1>
-      <p class="hero-lead">
-        La forma moderna, segura y transparente de comprar, vender o consignar tu auto en Chile.
-        Vehículos revisados, historial claro, sin sorpresas.
-      </p>
-
-      <div class="flex flex-wrap gap-4">
-        <a href="autos.html" class="btn-primary">
-          Ver autos disponibles
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        </a>
-        <a href="ucariano.html" class="btn-outline">Quiero ser Ucariano</a>
-      </div>
-
-      <!-- Stats row -->
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-num">+200</div>
-          <div class="hero-stat-label">Autos vendidos</div>
-        </div>
-        <div class="stat-vdivider"></div>
-        <div>
-          <div class="hero-stat-num">100%</div>
-          <div class="hero-stat-label">Revisados</div>
-        </div>
-        <div class="stat-vdivider"></div>
-        <div>
-          <div class="hero-stat-num">4.9★</div>
-          <div class="hero-stat-label">Google Reviews</div>
-        </div>
-      </div>
+  <div class="hero-content h-full flex flex-col justify-center px-6 lg:px-16 max-w-7xl mx-auto">
+    <div class="glass-badge inline-flex items-center gap-2 px-4 py-2 mb-8 self-start">
+      <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+      <span class="text-xs font-semibold text-white/70 uppercase tracking-widest">Lo Barnechea · Santiago</span>
     </div>
 
-    <!-- Hero vehicle grid preview -->
-    <div class="hidden lg:grid grid-cols-2 gap-4" id="hero-cars">
-      <div class="skeleton h-52 rounded-2xl"></div>
-      <div class="skeleton h-52 rounded-2xl mt-6"></div>
-      <div class="skeleton h-52 rounded-2xl -mt-2"></div>
-      <div class="skeleton h-52 rounded-2xl mt-4"></div>
+    <h1 class="hero-headline text-white mb-6 max-w-3xl">
+      Conduce hoy.<br>
+      <span class="thin text-white/40">Vende</span>
+      <span style="color:#1947e2"> mañana.</span>
+    </h1>
+
+    <p class="text-white/55 text-lg lg:text-xl max-w-lg mb-10 leading-relaxed font-light">
+      La forma moderna de comprar, vender y consignar tu auto en Chile.
+      Vehículos revisados, historial claro.
+    </p>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <a href="autos.html" class="flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-bold text-white transition-all hover:opacity-90" style="background:#1947e2">
+        Ver autos disponibles
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="ucariano.html" class="flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-bold text-white/80 border border-white/20 hover:border-white/50 hover:text-white transition-all">
+        Programa Ucariano
+      </a>
+    </div>
+
+    <div class="flex flex-wrap gap-6 mt-14">
+      <div>
+        <div class="text-3xl font-black text-white leading-none">+200</div>
+        <div class="text-xs text-white/40 mt-1 uppercase tracking-wider">Autos vendidos</div>
+      </div>
+      <div class="w-px bg-white/10 self-stretch"></div>
+      <div>
+        <div class="text-3xl font-black text-white leading-none">100%</div>
+        <div class="text-xs text-white/40 mt-1 uppercase tracking-wider">Revisados</div>
+      </div>
+      <div class="w-px bg-white/10 self-stretch"></div>
+      <div>
+        <div class="text-3xl font-black text-white leading-none">4.9★</div>
+        <div class="text-xs text-white/40 mt-1 uppercase tracking-wider">Google Reviews</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="py-16 px-6 reveal">
-  <div class="max-w-6xl mx-auto">
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon-wrap">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <h3>Revisión técnica completa</h3>
-        <p>Cada auto pasa por revisión de 60 puntos antes de publicarse. Sin sorpresas mecánicas.</p>
-        <a href="autos.html" class="feature-card-link">Ver autos disponibles →</a>
-      </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon-wrap">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-        </div>
-        <h3>Historial claro y verificado</h3>
-        <p>SOAP, multas, accidentes. Te entregamos el informe completo de cada vehículo antes de comprar.</p>
-        <a href="faq.html" class="feature-card-link">Saber más →</a>
-      </div>
-      <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon-wrap">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-        </div>
-        <h3>Consignación sin complicaciones</h3>
-        <p>Déjanos tu auto y nosotros lo vendemos. Tú fijas el precio, nosotros hacemos todo el trabajo.</p>
-        <a href="ucariano.html" class="feature-card-link">Conocer el programa →</a>
-      </div>
+<!-- BRAND PILLS -->
+<div class="py-6 px-6 border-b" style="border-color:rgba(255,255,255,.05)">
+  <div class="max-w-7xl mx-auto">
+    <div id="brand-pills" class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+      <button class="brand-pill active" data-brand="">Todos</button>
     </div>
   </div>
-</section>
+</div>
 
 <!-- AUTOS DESTACADOS -->
-<section class="py-20 px-6">
-  <div class="max-w-6xl mx-auto">
+<section class="py-16 px-6 lg:px-10">
+  <div class="max-w-7xl mx-auto">
     <div class="flex items-end justify-between mb-10">
-      <div>
-        <p class="text-blue-500 text-sm font-semibold uppercase tracking-wider mb-2">Inventario activo</p>
-        <h2 class="text-3xl lg:text-4xl font-black text-white">Autos disponibles</h2>
+      <div class="reveal">
+        <p class="section-label mb-2">Inventario activo</p>
+        <h2 class="section-title">Autos disponibles</h2>
       </div>
-      <a href="autos.html" class="btn-outline text-sm hidden md:flex">Ver todos →</a>
+      <a href="autos.html" class="hidden md:flex items-center gap-2 text-sm font-semibold text-white/50 hover:text-white transition-colors reveal">
+        Ver todos
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
     </div>
 
-    <div id="featured-cars" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Populated by JS -->
-      <div class="skeleton h-72 rounded-xl"></div>
-      <div class="skeleton h-72 rounded-xl"></div>
-      <div class="skeleton h-72 rounded-xl"></div>
+    <div id="cars-home" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="skeleton rounded-2xl" style="height:360px"></div>
+      <div class="skeleton rounded-2xl" style="height:360px"></div>
+      <div class="skeleton rounded-2xl" style="height:360px"></div>
     </div>
 
-    <div class="text-center mt-8 md:hidden">
-      <a href="autos.html" class="btn-primary">Ver todos los autos</a>
+    <div class="text-center mt-10 md:hidden">
+      <a href="autos.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold text-white" style="background:#1947e2">Ver todos los autos</a>
     </div>
   </div>
 </section>
 
-<!-- UCARIANO CTA BANNER -->
-<section class="py-20 px-6 bg-gradient-to-r from-purple-900/40 to-indigo-900/40 border-y border-purple-500/20">
-  <div class="max-w-4xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 rounded-full px-4 py-2 text-purple-300 text-sm font-medium mb-6">
-      🤝 Programa Ucariano
+<!-- WHY UCARS -->
+<section class="py-16 px-6 lg:px-10" style="border-top:1px solid rgba(255,255,255,.05)">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="section-label mb-2">¿Por qué elegirnos?</p>
+      <h2 class="section-title">Transparencia en cada paso</h2>
     </div>
-    <h2 class="text-3xl lg:text-4xl font-black text-white mb-4">
-      ¿Tienes auto y quieres <span class="text-purple-400">generar ingresos?</span>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="why-card reveal">
+        <div class="why-icon">🔍</div>
+        <h3 class="text-white font-bold text-lg mb-2">Revisión de 60 puntos</h3>
+        <p class="text-white/40 text-sm leading-relaxed">Motor, frenos, suspensión, chasis, eléctrico. Cada auto pasa por inspección completa antes de publicarse.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">📄</div>
+        <h3 class="text-white font-bold text-lg mb-2">Historial verificado</h3>
+        <p class="text-white/40 text-sm leading-relaxed">SOAP, multas, accidentes. Te entregamos el informe completo. Sin sorpresas después de comprar.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🤝</div>
+        <h3 class="text-white font-bold text-lg mb-2">Consignación sin stress</h3>
+        <p class="text-white/40 text-sm leading-relaxed">Déjanos tu auto y nosotros lo vendemos. Fotos, publicación, visitas y trámites: todo incluido.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UCARIANO CTA BAND -->
+<section class="cta-band py-20 px-6 lg:px-10 my-8 mx-4 lg:mx-10 rounded-3xl reveal">
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <p class="text-white/60 text-sm font-semibold uppercase tracking-widest mb-4">Programa Ucariano</p>
+    <h2 class="text-white font-black leading-tight mb-4" style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.035em">
+      Tu auto trabaja.<br>Tú descansas.
     </h2>
-    <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-      Únete al programa Ucariano. Consigna tu auto con nosotros y recibe el mejor precio del mercado.
-      Sin stress, sin trámites, sin pérdidas de tiempo.
+    <p class="text-white/65 text-lg mb-8 max-w-xl mx-auto">
+      Consigna tu auto con Ucars. Nos encargamos de todo y solo cobramos si lo vendemos.
     </p>
     <div class="flex flex-wrap gap-4 justify-center">
-      <a href="ucariano.html" class="btn-primary text-base">
-        Conocer el programa
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
+      <a href="ucariano.html" class="px-8 py-3.5 rounded-full bg-white text-gray-900 font-bold text-sm hover:bg-white/90 transition-all">
+        Conocer el programa →
       </a>
-      <a href="https://wa.me/56974992231?text=Hola,%20quiero%20ser%20Ucariano" target="_blank" rel="noopener noreferrer" class="btn-wa text-base">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Quiero info por WhatsApp
+      <a href="https://wa.me/56974992231?text=Hola,%20quiero%20ser%20Ucariano" target="_blank" rel="noopener noreferrer"
+         class="px-8 py-3.5 rounded-full border border-white/30 text-white font-bold text-sm hover:border-white/60 transition-all flex items-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Info por WhatsApp
       </a>
     </div>
   </div>
 </section>
 
-<!-- FORMULARIO LEAD — Vende tu auto rápido -->
-<section class="py-20 px-6">
-  <div class="max-w-4xl mx-auto">
+<!-- VENDE TU AUTO FORM -->
+<section class="py-16 px-6 lg:px-10">
+  <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <div>
-        <p class="text-blue-500 text-sm font-semibold uppercase tracking-wider mb-2">¿Quieres vender?</p>
-        <h2 class="text-3xl font-black text-white mb-4">Cotiza tu auto en<br><span class="text-blue-500">menos de 24 horas</span></h2>
-        <p class="text-slate-400 mb-6">Déjanos tus datos y te contactamos con la mejor oferta del mercado. Sin compromisos.</p>
-        <ul class="space-y-3 text-slate-300 text-sm">
-          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Tasación gratuita</li>
-          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Pago inmediato</li>
-          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Sin trámites complicados</li>
-          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Mejor precio garantizado</li>
+      <div class="reveal">
+        <p class="section-label mb-2">Tasación gratis</p>
+        <h2 class="section-title mb-4">Cotiza tu auto<br>en 24 horas</h2>
+        <p class="text-white/40 mb-6 leading-relaxed">Sin compromisos. Recibe la mejor oferta del mercado y decide con tiempo.</p>
+        <ul class="space-y-3 text-sm text-white/50">
+          <li class="flex items-center gap-3"><span class="text-green-400 font-bold">✓</span> Tasación gratuita en 24 hrs</li>
+          <li class="flex items-center gap-3"><span class="text-green-400 font-bold">✓</span> Pago inmediato o consignación</li>
+          <li class="flex items-center gap-3"><span class="text-green-400 font-bold">✓</span> Nosotros gestionamos los trámites</li>
+          <li class="flex items-center gap-3"><span class="text-green-400 font-bold">✓</span> Mejor precio garantizado</li>
         </ul>
       </div>
-      <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-8">
-        <h3 class="text-white font-bold text-xl mb-6">Quiero vender mi auto</h3>
-        <form id="lead-form-vende" class="space-y-4">
-          <div>
-            <label class="text-sm text-slate-400 mb-1 block">Nombre</label>
-            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre completo" required>
-          </div>
-          <div>
-            <label class="text-sm text-slate-400 mb-1 block">WhatsApp</label>
-            <input type="tel" name="telefono" class="form-input" placeholder="+56 9 XXXX XXXX" required>
-          </div>
-          <div>
-            <label class="text-sm text-slate-400 mb-1 block">Auto (marca y modelo)</label>
-            <input type="text" name="auto" class="form-input" placeholder="Ej: Toyota Corolla 2020" required>
-          </div>
-          <div>
-            <label class="text-sm text-slate-400 mb-1 block">Kilómetros aprox.</label>
-            <input type="text" name="km" class="form-input" placeholder="Ej: 45.000 km">
-          </div>
-          <button type="submit" class="btn-primary w-full justify-center">
-            Enviar por WhatsApp
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </button>
-          <p class="text-xs text-slate-500 text-center">Al enviar, abrirá WhatsApp con tu consulta lista para enviar.</p>
-        </form>
+      <div class="reveal" style="transition-delay:.1s">
+        <div class="rounded-2xl p-8 border" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.07)">
+          <h3 class="text-white font-bold text-lg mb-6">Quiero vender mi auto</h3>
+          <form id="lead-form-vende" class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-xs text-white/40 mb-1.5 block uppercase tracking-wider">Nombre</label>
+                <input type="text" name="nombre" class="input-field" placeholder="Tu nombre" required>
+              </div>
+              <div>
+                <label class="text-xs text-white/40 mb-1.5 block uppercase tracking-wider">WhatsApp</label>
+                <input type="tel" name="telefono" class="input-field" placeholder="+56 9 XXXX XXXX" required>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs text-white/40 mb-1.5 block uppercase tracking-wider">Auto (marca y modelo)</label>
+              <input type="text" name="auto" class="input-field" placeholder="Toyota Corolla 2021" required>
+            </div>
+            <div>
+              <label class="text-xs text-white/40 mb-1.5 block uppercase tracking-wider">Kilómetros aproximados</label>
+              <input type="text" name="km" class="input-field" placeholder="45.000 km">
+            </div>
+            <button type="submit" class="w-full py-3.5 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-opacity hover:opacity-90" style="background:#1947e2">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Enviar por WhatsApp
+            </button>
+            <p class="text-center text-xs text-white/25">Abrirá WhatsApp con tu consulta lista para enviar.</p>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="bg-slate-900 border-t border-slate-800 py-12 px-6">
-  <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
-    <div class="md:col-span-2">
-      <span class="text-2xl font-black text-white">U<span class="text-blue-600">cars</span></span>
-      <p class="text-slate-400 text-sm mt-3 max-w-xs leading-relaxed">
-        La forma moderna, segura y transparente de comprar, vender o consignar tu auto en Lo Barnechea.
-      </p>
-      <div class="flex gap-4 mt-4">
-        <a href="https://wa.me/56974992231" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="text-slate-400 hover:text-green-400 transition-colors">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </a>
-        <a href="https://instagram.com/ucars.cl" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-slate-400 hover:text-pink-400 transition-colors">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-        <a href="https://facebook.com/ucars.cl" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-slate-400 hover:text-blue-400 transition-colors">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
+<footer class="py-12 px-6 lg:px-10 border-t" style="border-color:rgba(255,255,255,.06)">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-2">
+        <span class="text-2xl font-black text-white">U<span style="color:#1947e2">cars</span></span>
+        <p class="text-white/30 text-sm mt-3 max-w-xs leading-relaxed">La forma moderna de comprar, vender y consignar tu auto en Lo Barnechea, Santiago.</p>
+        <div class="flex gap-4 mt-5">
+          <a href="https://wa.me/56974992231" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Ucars" class="text-white/30 hover:text-green-400 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+          <a href="https://instagram.com/ucarschile" target="_blank" rel="noopener noreferrer" aria-label="Instagram Ucars" class="text-white/30 hover:text-pink-400 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://facebook.com/people/Ucars/61563587999682" target="_blank" rel="noopener noreferrer" aria-label="Facebook Ucars" class="text-white/30 hover:text-blue-400 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">Sitio</p>
+        <ul class="space-y-2.5 text-sm text-white/40">
+          <li><a href="autos.html" class="hover:text-white transition-colors">Autos disponibles</a></li>
+          <li><a href="ucariano.html" class="hover:text-white transition-colors">Programa Ucariano</a></li>
+          <li><a href="financiamiento.html" class="hover:text-white transition-colors">Financiamiento</a></li>
+          <li><a href="vende.html" class="hover:text-white transition-colors">Vende tu auto</a></li>
+          <li><a href="faq.html" class="hover:text-white transition-colors">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">Contacto</p>
+        <ul class="space-y-2.5 text-sm text-white/40">
+          <li>📍 Lo Barnechea, RM</li>
+          <li><a href="tel:+56974992231" class="hover:text-white transition-colors">📞 +56 9 7499 2231</a></li>
+          <li><a href="mailto:contacto@ucars.cl" class="hover:text-white transition-colors">✉️ contacto@ucars.cl</a></li>
+          <li>🕐 Lun–Vie 10:00–19:00</li>
+          <li>🕐 Sáb 10:00–14:00</li>
+        </ul>
       </div>
     </div>
-
-    <div>
-      <h4 class="text-white font-semibold mb-4">Navegación</h4>
-      <ul class="space-y-2 text-sm text-slate-400">
-        <li><a href="autos.html" class="hover:text-blue-500 transition-colors">Autos disponibles</a></li>
-        <li><a href="ucariano.html" class="hover:text-blue-500 transition-colors">Programa Ucariano</a></li>
-        <li><a href="financiamiento.html" class="hover:text-blue-500 transition-colors">Financiamiento</a></li>
-        <li><a href="vende.html" class="hover:text-blue-500 transition-colors">Vende tu auto</a></li>
-        <li><a href="faq.html" class="hover:text-blue-500 transition-colors">FAQ</a></li>
-      </ul>
+    <div class="pt-6 border-t flex flex-col md:flex-row justify-between items-center gap-3" style="border-color:rgba(255,255,255,.06)">
+      <p class="text-white/20 text-xs">© 2026 Ucars. Todos los derechos reservados.</p>
+      <p class="text-white/15 text-xs">Desarrollo <a href="https://panchovial.com" target="_blank" rel="noopener noreferrer" class="hover:text-white/30 transition-colors">PVB Estudio Creativo</a></p>
     </div>
-
-    <div>
-      <h4 class="text-white font-semibold mb-4">Contacto</h4>
-      <ul class="space-y-2 text-sm text-slate-400">
-        <li>📍 Lo Barnechea, RM, Chile</li>
-        <li>📞 <a href="tel:+56974992231" class="hover:text-blue-500">+56 9 7499 2231</a></li>
-        <li>🕐 Lun–Vie: 10:00 – 19:00</li>
-        <li>🕐 Sáb: 10:00 – 14:00</li>
-        <li>🕐 Dom: Cerrado</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="max-w-6xl mx-auto mt-10 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-    <p class="text-slate-500 text-sm">© 2026 Ucars. Todos los derechos reservados.</p>
-    <p class="text-slate-600 text-xs">Sitio desarrollado por <a href="https://panchovial.com" class="hover:text-slate-400" target="_blank" rel="noopener noreferrer">PVB Estudio Creativo</a></p>
   </div>
 </footer>
 
 <!-- WhatsApp float -->
-<a href="https://wa.me/56974992231?text=Hola,%20quiero%20información%20sobre%20sus%20autos"
-   target="_blank" rel="noopener noreferrer" class="wa-float" aria-label="WhatsApp">
+<a href="https://wa.me/56974992231?text=Hola,%20quiero%20información%20sobre%20sus%20autos" target="_blank" rel="noopener noreferrer"
+   class="wa-float" aria-label="Contactar por WhatsApp">
   <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- Scroll top -->
-<button type="button" id="scroll-top" aria-label="Volver arriba">
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
-  </svg>
-</button>
+<script>
+// NAV scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
 
-<script src="assets/js/pixel-events.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/leads.js"></script>
+// Mobile menu
+document.getElementById('menu-toggle').addEventListener('click', () => {
+  const m = document.getElementById('mobile-menu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+});
+
+// Hero bg parallax load
+const heroBg = document.getElementById('hero-bg');
+const heroImg = new Image();
+heroImg.onload = () => heroBg.classList.add('loaded');
+heroImg.src = 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=85';
+
+// Scroll reveal
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+function fmtPrice(n) { return '$ ' + n.toLocaleString('es-CL'); }
+function fmtKm(n)    { return n.toLocaleString('es-CL') + ' km'; }
+
+const WA_SVG = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+const BADGE_COLORS = { 'Recién ingresado': '#1947e2', 'Destacado': '#7c3aed', 'Reservado': '#374151' };
+
+function buildCard(car) {
+  const badge = car.badge
+    ? `<span class="vcard-badge" style="background:${BADGE_COLORS[car.badge]||'#1947e2'};color:#fff">${car.badge}</span>`
+    : '';
+  const reservedOverlay = car.estado === 'Reservado'
+    ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center"><span style="background:#374151;color:#9ca3af;font-size:.75rem;font-weight:700;padding:6px 14px;border-radius:999px">Reservado</span></div>`
+    : '';
+  const cta = car.estado === 'Reservado'
+    ? `<div class="vcard-cta reserved">Reservado</div>`
+    : `<a href="https://wa.me/56974992231?text=${encodeURIComponent(car.whatsapp_msg||'Hola, me interesa el '+car.marca+' '+car.modelo+' '+car.año)}" target="_blank" class="vcard-cta">${WA_SVG} Ver este auto</a>`;
+
+  return `
+    <div class="vcard">
+      <div class="vcard-img-wrap">
+        <img src="${car.imagen}" alt="${car.marca} ${car.modelo}" loading="lazy">
+        <div class="vcard-img-overlay"></div>
+        ${badge}
+        <div class="vcard-price">${fmtPrice(car.precio)}</div>
+        <div class="vcard-fav">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        ${reservedOverlay}
+      </div>
+      <div class="vcard-body">
+        <div class="vcard-title">${car.marca} ${car.modelo}</div>
+        <div class="vcard-sub">${car.version}</div>
+        <div class="vcard-chips">
+          <span class="vcard-chip">${car.año}</span>
+          <span class="vcard-chip">${fmtKm(car.km)}</span>
+          <span class="vcard-chip">${car.combustible}</span>
+          <span class="vcard-chip">${car.transmision}</span>
+        </div>
+        ${cta}
+      </div>
+    </div>`;
+}
+
+let allCars = [];
+
+async function loadCars() {
+  try {
+    const r = await fetch('data/autos.json');
+    if (!r.ok) throw 0;
+    return await r.json();
+  } catch { return []; }
+}
+
+function populateBrands(cars) {
+  const pillsEl = document.getElementById('brand-pills');
+  const marcas = [...new Set(cars.map(c => c.marca))].sort();
+  marcas.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'brand-pill';
+    btn.dataset.brand = m;
+    btn.textContent = m;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.brand-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      renderHome(cars.filter(c => c.marca === m));
+    });
+    pillsEl.appendChild(btn);
+  });
+  document.querySelector('.brand-pill[data-brand=""]').addEventListener('click', () => {
+    document.querySelectorAll('.brand-pill').forEach(p => p.classList.remove('active'));
+    document.querySelector('.brand-pill[data-brand=""]').classList.add('active');
+    renderHome(cars);
+  });
+}
+
+function renderHome(cars) {
+  const grid = document.getElementById('cars-home');
+  const avail = cars.filter(c => c.estado === 'Disponible').slice(0, 6);
+  if (!avail.length) {
+    grid.innerHTML = '<p class="text-white/30 col-span-3 text-center py-10">No hay autos disponibles con este filtro.</p>';
+    return;
+  }
+  grid.innerHTML = avail.map(c => buildCard(c)).join('');
+}
+
+async function init() {
+  allCars = await loadCars();
+  populateBrands(allCars);
+  renderHome(allCars);
+}
+
+document.getElementById('lead-form-vende').addEventListener('submit', e => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  const msg = `Hola Ucars 👋, quiero vender mi auto:\n\n🚗 *Auto*: ${d.auto||'-'}\n📍 *Kilómetros*: ${d.km||'-'}\n👤 *Nombre*: ${d.nombre||'-'}\n📱 *Tel*: ${d.telefono||'-'}\n\n¿Pueden darme una tasación?`;
+  window.open('https://wa.me/56974992231?text=' + encodeURIComponent(msg), '_blank');
+});
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
